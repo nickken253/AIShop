@@ -123,72 +123,87 @@ const Products = () => {
   const ShowProducts = () => {
     return (
       <>
-        <div className="buttons text-center py-5">
-          <button className="btn btn-outline-dark btn-sm m-2" onClick={() => setFilter(data)}>All</button>
-          <button className="btn btn-outline-dark btn-sm m-2" onClick={() => filterProduct("Men")}>Men's Clothing</button>
-          <button className="btn btn-outline-dark btn-sm m-2" onClick={() => filterProduct("Unisex")}>Unisex's Clothing</button>
-          <button className="btn btn-outline-dark btn-sm m-2" onClick={() => filterProduct("Women")}>
-            Women's Clothing
-          </button>
-          <button className="btn btn-outline-dark btn-sm m-2" onClick={() => filterProduct1("Accessories")}>Accessories</button>
-          <button className="btn btn-outline-dark btn-sm m-2" onClick={() => filterProduct2("Red")}>Red</button>
-          <button className="btn btn-outline-dark btn-sm m-2" onClick={() => filterProduct2("Black")}>Black</button>
-          <button className="btn btn-outline-dark btn-sm m-2" onClick={() => filterProduct2("Blue")}>Blue</button>
-          <button className="btn btn-outline-dark btn-sm m-2" onClick={() => filterProduct2("White")}>White</button>
-          <button className="btn btn-outline-dark btn-sm m-2" onClick={() => filterProduct2("Grey")}>Grey</button>
-        </div>
-        <div className="buttons text-center py-5">
-          <button
-            className="btn btn-outline-dark btn-sm m-2"
-            onClick={() => sortProducts("low-to-high")}
-          >
-            Price: Low to High
-          </button>
-          <button
-            className="btn btn-outline-dark btn-sm m-2"
-            onClick={() => sortProducts("high-to-low")}
-          >
-            Price: High to Low
-          </button>
-        </div>
+      <div className="row">    
+        <div className="col-md-2">
+          <div className="buttons text-center py-5">
+            <button className="btn btn-outline-dark btn-sm m-2" onClick={() => setFilter(data)}>Clear Fitler</button>
+            <button className="btn btn-outline-dark btn-sm m-2" onClick={() => filterProduct("Men")}>Men's Clothing</button>
+            <button className="btn btn-outline-dark btn-sm m-2" onClick={() => filterProduct("Unisex")}>Unisex's Clothing</button>
+            <button className="btn btn-outline-dark btn-sm m-2" onClick={() => filterProduct("Women")}>
+              Women's Clothing
+            </button>
+            <button className="btn btn-outline-dark btn-sm m-2" onClick={() => filterProduct1("Accessories")}>Accessories</button>
+            <button className="btn btn-outline-dark btn-sm m-2" onClick={() => filterProduct2("Red")}>Red</button>
+            <button className="btn btn-outline-dark btn-sm m-2" onClick={() => filterProduct2("Black")}>Black</button>
+            <button className="btn btn-outline-dark btn-sm m-2" onClick={() => filterProduct2("Blue")}>Blue</button>
+            <button className="btn btn-outline-dark btn-sm m-2" onClick={() => filterProduct2("White")}>White</button>
+            <button className="btn btn-outline-dark btn-sm m-2" onClick={() => filterProduct2("Grey")}>Grey</button>
+          </div>
+        </div>  
 
+        <div className="col-md-10 col-sm-12 col-xs-12 col-12 mb-4">
 
-        {filter.map((product) => {
-          return (
-            <div id={product.id} key={product.id} className="col-md-4 col-sm-6 col-xs-8 col-12 mb-4">
-              <div className="card text-center h-100" key={product.id}>
-              <Link to={"/product/" + product.id}>
-                <img
-                  className="card-img-top p-3"
-                  src={product.link}
-                  alt="Card"
-                  height={300}
-                />
-                </Link>
-                <div className="card-body">
-                  <h5 className="card-title">
-                    {product.productDisplayName}...
-                  </h5>
-                  <p className="card-text">
-                    {product.description}...
-                  </p>
-                </div>
-                <ul className="list-group list-group-flush">
-                  <li className="list-group-item lead">{product.price.toLocaleString('vi-VN')} VNĐ</li>
-                </ul>
-                <div className="card-body">
-                  <Link to={"/product/" + product.id} className="btn btn-dark m-1">
-                    Buy Now
+          <select name="Price" id="price" placeholder="Price" onChange={(e) => sortProducts(e.target.value)}>
+            <option value="">Price</option>
+            <option value="low-to-high">Price: Low to High</option>
+            <option value="high-to-low">Price: High to Low</option>
+          </select>
+          <div className="buttons text-center py-5">
+
+            <button
+              className="btn btn-outline-dark btn-sm m-2"
+              onClick={() => sortProducts("low-to-high")}
+            >
+              Price: Low to High
+            </button>
+            <button
+              className="btn btn-outline-dark btn-sm m-2"
+              onClick={() => sortProducts("high-to-low")}
+            >
+              Price: High to Low
+            </button>
+          </div>
+
+          <div className="row">
+          {filter.map((product) => {
+            return (
+              <div id={product.id} key={product.id} className="col-md-4 col-sm-6 col-xs-8 col-12 mb-4">
+                <div className="card text-center h-100" key={product.id}>
+                <Link to={"/product/" + product.id}>
+                  <img
+                    className="card-img-top p-3 img-responsive"
+                    src={product.link}
+                    alt="Card"
+                    style={{ objectFit: "cover" }}
+                  />
                   </Link>
-                  <button className="btn btn-dark m-1" onClick={() => handleAddToCart(product)}>
-                    Add to Cart
-                  </button>
+                  <div className="card-body">
+                    <h5 className="card-title">
+                      {product.productDisplayName}...
+                    </h5>
+                    <p className="card-text">
+                      {product.description}...
+                    </p>
+                  </div>
+                  <ul className="list-group list-group-flush">
+                    <li className="list-group-item lead">{product.price.toLocaleString('vi-VN')} VNĐ</li>
+                  </ul>
+                  <div className="card-body">
+                    <Link to={"/product/" + product.id} className="btn btn-dark m-1">
+                      Buy Now
+                    </Link>
+                    <button className="btn btn-dark m-1" onClick={() => handleAddToCart(product)}>
+                      Add to Cart
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
 
-          );
-        })}
+            );
+          })}
+          </div>
+        </div>
+      </div>
       </>
     );
   };
