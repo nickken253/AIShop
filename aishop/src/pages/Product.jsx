@@ -11,6 +11,7 @@ const Product = () => {
   const { id } = useParams();
   const [product, setProduct] = useState([]);
   const [similarProducts, setSimilarProducts] = useState([]);
+  const [similarList, setSimilarList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loading2, setLoading2] = useState(false);
 
@@ -21,7 +22,6 @@ const Product = () => {
   const handleToCart = () => {
     if (sessionStorage.getItem('token') != null) {
       // Add product to cart using addCart action
-      console.log('hi ae');
       navigate("/cart", { replace: true });
     } else {
       // Redirect to login page if not logged in
@@ -36,9 +36,8 @@ const Product = () => {
       const productId = product._id // Assuming data structure
       const userId = sessionStorage.getItem("userId");
       // const token = localStorage.getItem('token'); // Retrieve token from storage
-      console.log(productId);
-      console.log(product);
-      console.log(userId);
+
+      // Phần này đưa item vào trong giỏ hàng khi ấn thêm.
       const url = 'http://20.2.223.204:3031/api/cart/add-cart-item/' + userId;
       const response = await fetch(url, {
         method: "POST",
@@ -59,37 +58,53 @@ const Product = () => {
     }
   };
 
-  const getProductbyId = async (product) => {
-    const productId = product._id;
-    const url = 'http://20.2.223.204:3031/api/cart/productId/' + productId;
-    const response = await fetch(url, {
-      method: "GET",
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    const data = await response.json();
-    return data;
-  };
+  
 
+  const getProduct = async () => {
+    setLoading(true);
+    setLoading2(true);
+    const response = await fetch(`http://20.2.223.204:3031/api/products/productId/${id}`);
+    const data = await response.json();
+    setProduct(data);
+    console.log(data);
+    setLoading(false);
+    const aiResponse = await fetch(
+      `http://20.2.223.204:3033/recommendations`, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          img_url: data.link,
+        }),
+      }
+    );
+    const aiData = await aiResponse.json();
+    setSimilarProducts(aiData);
+    setLoading2(false);
+  };
+  const handleSimilarList = async () => {
+    similarProducts.map(async (productId) => {
+        const url = 'http://20.2.223.204:3031/api/products/productId/' + productId;
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        const data = await response.json();
+        console.log(data);
+        setSimilarList([...similarList, data]);
+        return data;
+    });
+    ShowSimilarProduct();
+  };
   useEffect(() => {
-    const getProduct = async () => {
-      setLoading(true);
-      setLoading2(true);
-      const response = await fetch(`http://20.2.223.204:3031/api/products/productId/${id}`);
-      const data = await response.json();
-      setProduct(data);
-      setLoading(false);
-      const response2 = await fetch(
-        `http://20.2.223.204:3033/recommendations`
-      );
-      const data2 = await response2.json();
-      setSimilarProducts(data2);
-      setLoading2(false);
-      console.log('data2 good');
-    };
     getProduct();
   }, [id]);
+  useEffect(() => {
+    handleSimilarList();
+  }, [similarProducts]);
 
   const Loading = () => {
     return (
@@ -135,7 +150,7 @@ const Product = () => {
                 {product.rating && product.rating.rate}{" "}
                 <i className="fa fa-star"></i>
               </p> */}
-              <h3 className="display-6  my-4">{product.price.toLocaleString('vi-VN')} VNĐ</h3>
+              <h3 className="display-6  my-4">{product.price} VNĐ</h3>
               {/* .toLocaleString('vi-VN') */}
               {/* <p className="lead">{product.description}</p> */}
               <button
@@ -182,8 +197,8 @@ const Product = () => {
       <>
         <div className="py-4 my-4">
           <div className="d-flex">
-            {similarProducts.map((product) => {
-              const item = getProductbyId(product);
+            {similarList.map((product) => {
+              const item = product;
               return (
                 <div key={item.id} className="card mx-4 text-center">
                   <img

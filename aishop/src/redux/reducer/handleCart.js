@@ -1,5 +1,7 @@
 const userId = sessionStorage.getItem("userId");
-const url = 'http://20.2.223.204:3031/api/cart/get-cart-items/' + userId;
+let cart = [];
+if(userId) {
+    const url = 'http://20.2.223.204:3031/api/cart/get-cart-items/' + userId;
 const response = await fetch(url, {
   method: "PUT",
   headers: {
@@ -10,7 +12,12 @@ const response = await fetch(url, {
 });
 const data = await response.json();
 
-const cart = data;
+
+if(data){
+    cart = data;
+}
+}
+
 
 const handleCart = (state=cart, action) =>{
     const product = action.payload
