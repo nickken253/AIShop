@@ -19,7 +19,7 @@ root.render(
   <ToastContainer />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/Profile" element={<Profile />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/product" element={<Products />} />
         <Route path="/product/:id" element={<Product />} />
         <Route path="/about" element={<AboutPage />} />

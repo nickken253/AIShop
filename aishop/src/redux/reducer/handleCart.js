@@ -3,7 +3,7 @@ let cart = [];
 if(userId) {
     const url = 'http://20.2.223.204:3031/api/cart/get-cart-items/' + userId;
 const response = await fetch(url, {
-  method: "PUT",
+  method: "GET",
   headers: {
     'Content-Type': 'application/json',
     'Authorization': `Bearer ${sessionStorage.getItem('token')}`

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Footer, Navbar } from "../components";
 import { useSelector, useDispatch } from "react-redux";
 import { addCart, delCart } from "../redux/action";
@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 
 const Cart = () => {
   const state = useSelector((state) => state.handleCart);
+
   const dispatch = useDispatch();
 
   const EmptyCart = () => {
@@ -64,9 +65,9 @@ const Cart = () => {
     dispatch(delCart(product));
   };
 
-  const getProductbyId = async (product) => {
-    const productId = product._id;
-    const url = 'http://20.2.223.204:3031/api/cart/productId/' + productId;
+  const getProductbyId = async (productId) => {
+    console.log('thu nghiem 2');
+    const url = 'http://20.2.223.204:3031/api/products/productId/' + productId;
     const response = await fetch(url, {
       method: "GET",
       headers: {
@@ -74,11 +75,29 @@ const Cart = () => {
       },
     });
     const data = await response.json();
+    console.log('thu lan 1');
+    console.log(data);
     return data;
   };
 
   const ShowCart = () => {
+    const [products, setProducts] = useState([]);
 
+    useEffect(() => {
+      const fetchProducts = async () => {
+        const fetchedProducts = await Promise.all(
+          state.map(async (product) => {
+            const fetchedProduct = await getProductbyId(product.id);
+            return {
+              ...fetchedProduct,
+              qty: product.qty, // Thêm qty từ state
+            };
+          })
+        );
+        setProducts(fetchedProducts);
+      };
+      fetchProducts();
+    }, []);
     let subtotal = 0;
     let shipping = 30000;
     let totalItems = 0;
@@ -100,8 +119,8 @@ const Cart = () => {
                     <h5 className="mb-0">Item List</h5>
                   </div>
                   <div className="card-body">
-                    {state.map((product) => {
-                      const item = getProductbyId(product);
+                    {products.map((item) => {
+
                       return (
                         <div key={item.id}>
                           <div className="row d-flex align-items-center">
@@ -157,7 +176,7 @@ const Cart = () => {
                               <p className="text-start text-md-center">
                                 <strong>
                                   <span className="text-muted">{item.qty}</span>{" "}
-                                  x {item.price.toLocaleString('vi-VN')} VNĐ
+                                  x {item.price} VNĐ
                                 </strong>
                               </p>
                             </div>
@@ -178,18 +197,18 @@ const Cart = () => {
                   <div className="card-body">
                     <ul className="list-group list-group-flush">
                       <li className="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
-                        Products ({totalItems})<span>{Math.round(subtotal).toLocaleString('vi-VN')} VNĐ</span>
+                        Products ({totalItems})<span>{Math.round(subtotal)} VNĐ</span>
                       </li>
                       <li className="list-group-item d-flex justify-content-between align-items-center px-0">
                         Shipping
-                        <span>{shipping.toLocaleString('vi-VN')} VNĐ</span>
+                        <span>{shipping} VNĐ</span>
                       </li>
                       <li className="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
                         <div>
                           <strong>Total amount</strong>
                         </div>
                         <span>
-                          <strong>{Math.round(subtotal + shipping).toLocaleString('vi-VN')} VNĐ</strong>
+                          <strong>{Math.round(subtotal + shipping)} VNĐ</strong>
                         </span>
                       </li>
                     </ul>

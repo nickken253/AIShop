@@ -151,44 +151,42 @@ const Register = () => {
                                     onChange={(e) => setPhone(e.target.value)}
                                 />
                             </div>
-                            <div className="form-group my-3">
-  <label htmlFor="gender">Gender</label>
-  <div className="d-flex flex-row">
-    <div className="mr-3">
-      <input
-        type="radio"
-        id="male"
-        name="gender"
-        value="male"
-        checked={gender === "male"} // Set checked based on gender state
-        onChange={(e) => setGender(e.target.value)}
-      />
-      <label htmlFor="male">Male</label>
-    </div>
-    <div className="mr-3">
-      <input
-        type="radio"
-        id="female"
-        name="gender"
-        value="female"
-        checked={gender === "female"} // Set checked based on gender state
-        onChange={(e) => setGender(e.target.value)}
-      />
-      <label htmlFor="female">Female</label>
-    </div>
-    <div>
-      <input
-        type="radio"
-        id="other"
-        name="gender"
-        value="other"
-        checked={gender === "other"} // Set checked based on gender state
-        onChange={(e) => setGender(e.target.value)}
-      />
-      <label htmlFor="other">Other</label>
-    </div>
-  </div>
-</div>
+                            <div className="form-group my-3 d-flex flex-row align-items-center">
+                                <label htmlFor="gender">Gender:</label>
+                                <div className="ml-3">
+                                    <input
+                                        type="radio"
+                                        id="Male"
+                                        name="gender"
+                                        value="Male"
+                                        checked={gender === "Male"} // Set checked based on gender state
+                                        onChange={(e) => setGender(e.target.value)}
+                                    />
+                                    <label htmlFor="male">Male</label>
+                                </div>
+                                <div className="ml-3">
+                                    <input
+                                        type="radio"
+                                        id="Female"
+                                        name="gender"
+                                        value="Female"
+                                        checked={gender === "Female"} // Set checked based on gender state
+                                        onChange={(e) => setGender(e.target.value)}
+                                    />
+                                    <label htmlFor="female">Female</label>
+                                </div>
+                                <div className="ml-3">
+                                    <input
+                                        type="radio"
+                                        id="Other"
+                                        name="gender"
+                                        value="Other"
+                                        checked={gender === "Other"} // Set checked based on gender state
+                                        onChange={(e) => setGender(e.target.value)}
+                                    />
+                                    <label htmlFor="other">Other</label>
+                                </div>
+                            </div>
                             <div className="form my-3">
                                 <label htmlFor="Email">Email address</label>
                                 <input
@@ -228,6 +226,11 @@ const Register = () => {
                                     Already have an account?{" "}
                                     <Link to="/login" className="text-decoration-underline text-info">
                                         Login
+                                    </Link>
+                                </p>
+                                <p>
+                                    <Link to="/register" className="text-decoration-underline text-info">
+                                        Forgot password?{" "}
                                     </Link>
                                 </p>
                             </div>

@@ -25,8 +25,7 @@ const Navbar = () => {
       };
 
     const handleLogout = () => {
-        sessionStorage.removeItem("token");
-        sessionStorage.removeItem("userId");
+        sessionStorage.clear();
         dispatch(logout());
         navigate("/", { replace: true });
     };
@@ -70,6 +69,9 @@ const Navbar = () => {
                                 <button className="btn btn-outline-dark m-2" onClick={() => handleLogout()}>
                                     <i className="fa fa-sign-out-alt mr-1"></i> Logout
                                 </button>
+                                <NavLink to="/profile" className="btn btn-outline-dark m-2">
+                                    <i className="fa fa-user-plus mr-1"></i> Profile
+                                </NavLink>
                             </>
                         )}
                         <button className="btn btn-outline-dark m-2" onClick={() => handleToCart()}>

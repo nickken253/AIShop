@@ -1,78 +1,91 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from 'react-redux'
+import { MDBCol, MDBContainer, MDBRow, MDBCard, MDBCardText, MDBCardBody, MDBCardImage, MDBBtn, MDBTypography } from 'mdb-react-ui-kit';
 
-const Profile = async () => {
+const Profile = () => {
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+  const state = useSelector(state => state.handleCart)
   const userId = sessionStorage.getItem("userId");
 
-  const url = 'http://20.2.223.204:3031/api/users/get-user/' + userId;
-  const response = await fetch(url, {
-    method: "GET",
-    headers: {
-      'Content-Type': 'application/json',
-    },
+  console.log(userId);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const url = `http://20.2.223.204:3031/api/users/get-user/${userId}`;
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
 
-  });
-  const data = await response.json();
+        if (!response.ok) {
+          throw new Error(`Error fetching data: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setData(data);
+      } catch (error) {
+        setError(error);
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [userId]);
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+  if (!data) {
+    return <div>Loading...</div>;
+  }
   return (
     <>
-      <section class="h-100 gradient-custom-2">
-        <div class="container py-5 h-100">
-          <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col col-lg-9 col-xl-7">
-              <div class="card">
-                <div class="rounded-top text-white d-flex flex-row" style="background-color: #000; height:200px;">
-                  <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
-                    <img src={data.profile.avatarLink}
-                      alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
-                      style="width: 150px; z-index: 1" />
-                    <button type="button" class="btn btn-outline-dark" data-mdb-ripple-color="dark"
-                      style="z-index: 1;" disabled>
+      <div className="gradient-custom-2" style={{ backgroundColor: '#9de2ff' }}>
+        <MDBContainer className="py-5 h-100">
+          <MDBRow className="justify-content-center align-items-center h-100">
+            <MDBCol lg="9" xl="7">
+              <MDBCard>
+                <div className="rounded-top text-white d-flex flex-row" style={{ backgroundColor: '#000', height: '200px' }}>
+                  <div className="ms-4 mt-5 d-flex flex-column" style={{ width: '150px' }}>
+                    <MDBCardImage src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"
+                      alt="Generic placeholder image" className="mt-4 mb-2 img-thumbnail" fluid style={{ width: '150px', zIndex: '1' }} />
+                    <MDBBtn outline color="dark" style={{ height: '36px', overflow: 'visible' }}>
                       Edit profile
-                    </button>
+                    </MDBBtn>
                   </div>
-                  <div class="ms-3" style="margin-top: 130px;">
-                    <h5>{data.profile.firstname}</h5>
-                    <p>{data.address.nation}</p>
-                  </div>
-                </div>
-                <div class="card-body p-4 text-black">
-                  <div class="mb-5">
-                    <p class="lead fw-normal mb-1">About</p>
-                    <div class="p-4" style="background-color: #f8f9fa;">
-                      <p class="font-italic mb-1">{data.profile.gender}</p>
-                      <p class="font-italic mb-1">{data.profile.email}</p>
-                      <p class="font-italic mb-0">{data.profile.phone}</p>
-                    </div>
-                  </div>
-                  <div class="d-flex justify-content-between align-items-center mb-4">
-                    <p class="lead fw-normal mb-0">Recent photos</p>
-                    <p class="mb-0"><a href="#!" class="text-muted">Show all</a></p>
-                  </div>
-                  <div class="row g-2">
-                    <div class="col mb-2">
-                      <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(112).webp"
-                        alt="image 1" class="w-100 rounded-3" />
-                    </div>
-                    <div class="col mb-2">
-                      <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(107).webp"
-                        alt="image 1" class="w-100 rounded-3" />
-                    </div>
-                  </div>
-                  <div class="row g-2">
-                    <div class="col">
-                      <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(108).webp"
-                        alt="image 1" class="w-100 rounded-3" />
-                    </div>
-                    <div class="col">
-                      <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(114).webp"
-                        alt="image 1" class="w-100 rounded-3" />
-                    </div>
+                  <div className="ms-3" style={{ marginTop: '130px' }}>
+                    <MDBTypography tag="h5">{data.profile.firstname} {data.profile.lastname}</MDBTypography>
+                    <MDBCardText>{data.address.nation}</MDBCardText>
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+                <div className="p-4 text-black" style={{ backgroundColor: '#f8f9fa' }}>
+                  <div className="d-flex justify-content-end text-center py-1">
+
+                    <div className="px-3">
+                      <MDBCardText className="mb-1 h5">({state.length})</MDBCardText>
+                      <MDBCardText className="small text-muted mb-0"><i className="fa fa-cart-shopping mr-1"></i> Cart ({state.length})</MDBCardText>
+                    </div>
+
+                  </div>
+                </div>
+                <MDBCardBody className="text-black p-4">
+                  <div className="mb-5">
+                    <p className="lead fw-normal mb-1">About</p>
+                    <div className="p-4" style={{ backgroundColor: '#f8f9fa' }}>
+                      <MDBCardText className="font-italic mb-1">{data.profile.email}</MDBCardText>
+                      <MDBCardText className="font-italic mb-1">{data.profile.phone}</MDBCardText>
+                      <MDBCardText className="font-italic mb-0">{data.profile.gender}</MDBCardText>
+                    </div>
+                  </div>
+                </MDBCardBody>
+              </MDBCard>
+            </MDBCol>
+          </MDBRow>
+        </MDBContainer>
+      </div>
     </>
   );
 };

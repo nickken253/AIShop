@@ -25,7 +25,6 @@ const Product = () => {
       navigate("/cart", { replace: true });
     } else {
       // Redirect to login page if not logged in
-      console.log('ok good');
       navigate("/login", { replace: true }); // Replace the current route with login
     }
   };
@@ -58,7 +57,7 @@ const Product = () => {
     }
   };
 
-  
+
 
   const getProduct = async () => {
     setLoading(true);
@@ -70,14 +69,14 @@ const Product = () => {
     setLoading(false);
     const aiResponse = await fetch(
       `http://20.2.223.204:3033/recommendations`, {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          img_url: data.link,
-        }),
-      }
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        img_url: data.link,
+      }),
+    }
     );
     const aiData = await aiResponse.json();
     setSimilarProducts(aiData);
@@ -85,17 +84,17 @@ const Product = () => {
   };
   const handleSimilarList = async () => {
     similarProducts.map(async (productId) => {
-        const url = 'http://20.2.223.204:3031/api/products/productId/' + productId;
-        const response = await fetch(url, {
-          method: "GET",
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-        const data = await response.json();
-        console.log(data);
-        setSimilarList([...similarList, data]);
-        return data;
+      const url = 'http://20.2.223.204:3031/api/products/productId/' + productId;
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const data = await response.json();
+      console.log(data);
+      setSimilarList([...similarList, data]);
+      return data;
     });
     ShowSimilarProduct();
   };
@@ -150,7 +149,7 @@ const Product = () => {
                 {product.rating && product.rating.rate}{" "}
                 <i className="fa fa-star"></i>
               </p> */}
-              <h3 className="display-6  my-4">{product.price} VNĐ</h3>
+              <h3 className="display-6  my-4">{product.price.toLocaleString('vi-VN')} VNĐ</h3>
               {/* .toLocaleString('vi-VN') */}
               {/* <p className="lead">{product.description}</p> */}
               <button
