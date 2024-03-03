@@ -57,8 +57,6 @@ const Product = () => {
     }
   };
 
-
-
   const getProduct = async () => {
     setLoading(true);
     setLoading2(true);
