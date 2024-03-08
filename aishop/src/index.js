@@ -1,22 +1,33 @@
-import React from 'react';
+import React from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import ReactDOM from 'react-dom/client';
-import '../node_modules/font-awesome/css/font-awesome.min.css';
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import store from './redux/store';
+import ReactDOM from "react-dom/client";
+import "../node_modules/font-awesome/css/font-awesome.min.css";
+import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import NotFound from "./pages/NotFound";
+import { Provider } from "react-redux";
+import store from "./redux/store";
 
+import {
+  Home,
+  Product,
+  Products,
+  AboutPage,
+  ContactPage,
+  Cart,
+  Login,
+  Register,
+  Checkout,
+  PageNotFound,
+  Profile,
+} from "./pages";
 
-
-import { Home, Product, Products, AboutPage, ContactPage, Cart, Login, Register, Checkout, PageNotFound, Profile } from "./pages"
-
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
     <Provider store={store}>
-  <ToastContainer />
+      <ToastContainer />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/profile" element={<Profile />} />
@@ -30,6 +41,7 @@ root.render(
         <Route path="/checkout" element={<Checkout />} />
         <Route path="*" element={<PageNotFound />} />
         <Route path="/product/*" element={<PageNotFound />} />
+        <Route component={NotFound} />
       </Routes>
     </Provider>
   </BrowserRouter>

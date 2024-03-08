@@ -81,21 +81,20 @@ const Product = () => {
     setLoading2(false);
   };
   const handleSimilarList = async () => {
-    similarProducts.map(async (productId) => {
-      const url = 'http://20.2.223.204:3031/api/products/productId/' + productId;
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      const data = await response.json();
-      console.log(data);
-      setSimilarList([...similarList, data]);
-      return data;
+  const updatedSimilarList = await Promise.all(similarProducts.map(async (productId) => {
+    const url = 'http://20.2.223.204:3031/api/products/productId/' + productId;
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
-    ShowSimilarProduct();
-  };
+    const data = await response.json();
+    return data;
+  }));
+  setSimilarList(updatedSimilarList);
+  ShowSimilarProduct(); 
+};
   useEffect(() => {
     getProduct();
   }, [id]);
@@ -188,7 +187,10 @@ const Product = () => {
       </>
     );
   };
-
+  const handleProductClick = (productId) => {
+    // Chuyển hướng sang trang chi tiết của sản phẩm được chọn
+    navigate(`/product/${productId}`);
+  };
   const ShowSimilarProduct = () => {
     return (
       <>
@@ -197,13 +199,12 @@ const Product = () => {
             {similarList.map((product) => {
               const item = product;
               return (
-                <div key={item.id} className="card mx-4 text-center">
+                <div key={item.id} className="card mx-4 text-center" style={{ width: "210px", height: "auto", cursor: "pointer"}} >
                   <img
-                    className="card-img-top p-3"
+                    className="card-img-top p-3 img-fluid"
                     src={item.link}
                     alt="Card"
-                    height={300}
-                    width={300}
+                    onClick={() => handleProductClick(product.id)}
                   />
                   <div className="card-body">
                     <h5 className="card-title">
