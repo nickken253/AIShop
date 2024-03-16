@@ -16,8 +16,9 @@ function HomeInfo() {
           delectus provident quo eveniet.
         </p>
       </div>
+      <div className="bg-red-600 font-bold">ABC</div>
       <button className="explore-clothing_btn">
-        <Link to="/product">Discover Our Products</Link>
+        <Link to="/product" className="font-bold no-underline">Discover Our Products</Link>
       </button>
     </article>
   );
