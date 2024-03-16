@@ -146,7 +146,7 @@ const Product = () => {
                 {product.rating && product.rating.rate}{" "}
                 <i className="fa fa-star"></i>
               </p> */}
-              <h3 className="display-6  my-4">{product.price.toLocaleString('vi-VN')} VNĐ</h3>
+              <h3 className="display-6  my-4">{product.price} VNĐ</h3>
               {/* .toLocaleString('vi-VN') */}
               {/* <p className="lead">{product.description}</p> */}
               <button
@@ -212,7 +212,7 @@ const Product = () => {
                     </h5>
                   </div>
                   <ul className="list-group list-group-flush">
-                    <li className="list-group-item lead">{product.price.toLocaleString('vi-VN')} VNĐ</li>
+                    <li className="list-group-item lead">{product.price} VNĐ</li>
                   </ul>
                 </div>
               );
