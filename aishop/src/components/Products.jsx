@@ -148,21 +148,6 @@ const Products = () => {
             <option value="low-to-high">Price: Low to High</option>
             <option value="high-to-low">Price: High to Low</option>
           </select>
-          <div className="buttons text-center py-5">
-
-            <button
-              className="btn btn-outline-dark btn-sm m-2"
-              onClick={() => sortProducts("low-to-high")}
-            >
-              Price: Low to High
-            </button>
-            <button
-              className="btn btn-outline-dark btn-sm m-2"
-              onClick={() => sortProducts("high-to-low")}
-            >
-              Price: High to Low
-            </button>
-          </div>
 
           <div className="row">
           {filter.map((product) => {
